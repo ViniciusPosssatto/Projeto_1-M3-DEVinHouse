@@ -5,7 +5,7 @@ def test_app_not_is_name_failed(app):
   assert app.name != "aplicação do squad2"
 
 def test_config_is_loaded(config):
-  assert config['DEBUG'] is False
+  assert config['DEBUG'] is True
 
 def test_request_returns_404(client):
   assert client.get('/').status_code == 404
