@@ -124,7 +124,7 @@ def test_update_email_not_valid(client, logged_in_client):
     assert response.json["email"] == ["Não é um campo válido."]
 
 
-def test_update_senha_not_valid(client, logged_in_client):
+def test_update_passsword_not_valid(client, logged_in_client):
     headers = {
         'Content-Type': mimetype,
         'Accept': mimetype,
@@ -218,4 +218,22 @@ def test_update_wrong_param(client, logged_in_client):
     } 
 
     response = client.patch(f"{url}/{param}", data=json.dumps(data), headers=headers)
+    assert response.status_code == 404
+
+
+def test_update_missing_param(client, logged_in_client):
+    headers = {
+        'Content-Type': mimetype,
+        'Accept': mimetype,
+        'Authorization': f'Bearer {logged_in_client}'
+    }
+    data = {
+        "city_id": 1, 
+        "name": "Jorge da Silva", 
+        "age": "1991-8-9", 
+        "email": "corinta1.lima@example.com", 
+        "password": "123Trocar!"
+    } 
+
+    response = client.patch(f"{url}", data=json.dumps(data), headers=headers)
     assert response.status_code == 404
