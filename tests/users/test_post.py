@@ -70,10 +70,9 @@ def test_create_missing_fields(client, logged_in_client):
         "complement": "atras do muro azul"
     }
     del data[keys_not_have_in_request]
-    print(keys_not_have_in_request)
     response = client.post(url, data=json.dumps(data), headers=headers)
     assert response.status_code == 400
-    # assert response.json[keys_not_have_in_request] == f"O campo {keys_not_have_in_request} é obrigatório."
+    assert response.json[keys_not_have_in_request] == [f"O campo {keys_not_have_in_request} é obrigatório."]
 
 
 def test_create_success(client, logged_in_client):
