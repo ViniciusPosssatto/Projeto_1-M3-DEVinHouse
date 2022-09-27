@@ -178,3 +178,44 @@ def test_update_exists_email(client, logged_in_client):
     assert response.json == {'error': 'Email já existe.'}
 
 
+def test_update_change_fields_not_null(client, logged_in_client):
+    headers = {
+        'Content-Type': mimetype,
+        'Accept': mimetype,
+        'Authorization': f'Bearer {logged_in_client}'
+    }
+    keys = ["city_id", "name", "age", "email", "password"]
+    keys_not_have_in_request = keys.pop(random.randrange(len(keys)))
+    param = 5
+    data = {
+        "city_id": 1, 
+        "name": "Jorge da Silva", 
+        "age": "1991-8-9", 
+        "email": "corinta1.lima@example.com", 
+        "password": "123Trocar!"
+    }
+    data[keys_not_have_in_request] = None 
+
+    response = client.patch(f"{url}/{param}", data=json.dumps(data), headers=headers)
+    assert response.status_code == 400
+    assert response.json[keys_not_have_in_request] == ['Field may not be null.']
+
+
+def test_update_wrong_param(client, logged_in_client):
+    headers = {
+        'Content-Type': mimetype,
+        'Accept': mimetype,
+        'Authorization': f'Bearer {logged_in_client}'
+    }
+    keys = {"int": -1, "string": "asd"}
+    param = random.choice(list(keys.values()))
+    data = {
+        "city_id": 1, 
+        "name": "Jorge da Silva", 
+        "age": "1991-8-9", 
+        "email": "corinta1.lima@example.com", 
+        "password": "123Trocar!"
+    } 
+
+    response = client.patch(f"{url}/{param}", data=json.dumps(data), headers=headers)
+    assert response.status_code == 404
