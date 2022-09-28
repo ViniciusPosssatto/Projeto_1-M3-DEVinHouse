@@ -40,7 +40,7 @@ def list_all_requirements():
 
 @inventory.route("/create", methods= ["POST"])
 @validate_body(ProductBodySchema())
-# @requires_access_level(["WRITE"])
+@requires_access_level(["WRITE"])
 def create(body):
 
     if exist_product_code(body['product_code']):

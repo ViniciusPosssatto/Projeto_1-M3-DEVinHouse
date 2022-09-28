@@ -38,11 +38,12 @@ def test_get_all_success(client, logged_in_client):
    
     response = client.get(f"{url}", headers=headers)
     assert response.status_code == 200
-    assert "id" in response.json[0]
-    assert "name" in response.json[0]
-    assert "email" in response.json[0]
-    assert "phone" in response.json[0]
-    assert "role.name" in response.json[0]
+    for item in response.json:
+        assert "id" in item
+        assert "name" in item
+        assert "email" in item
+        assert "phone" in item
+        assert "role.name" in item
 
 
 def test_get_success_one_query_param(client, logged_in_client):
@@ -67,11 +68,12 @@ def test_get_success_fields(client, logged_in_client):
     query_param = "name=Luis"
     response = client.get(f"{url}?{query_param}", headers=headers)
     assert response.status_code == 200
-    assert "id" in response.json[0]
-    assert "name" in response.json[0]
-    assert "email" in response.json[0]
-    assert "phone" in response.json[0]
-    assert "role.name" in response.json[0]
+    for item in response.json:
+        assert "id" in item
+        assert "name" in item
+        assert "email" in item
+        assert "phone" in item
+        assert "role.name" in item
 
 
 def test_get_success_query_param_name_page(client, logged_in_client):
