@@ -1,4 +1,3 @@
-from typing import List
 from flask import json
 import random
 
