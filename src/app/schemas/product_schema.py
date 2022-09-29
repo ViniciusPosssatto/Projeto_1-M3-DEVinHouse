@@ -42,3 +42,14 @@ class UpdateProductBodySchema(Schema):
             data['user_id'] = None
             return data
         return data
+    
+    @post_load()
+    def change_decimal_places(self, data, **kwargs):
+        value = data.get('value')
+        data['value'] = round(value, 2)
+        return data
+    
+    @validates('value')
+    def validate_value(self, value):
+        if value <= 0:
+            raise ValidationError('O valor não pode ser menor ou igual a 0.')
