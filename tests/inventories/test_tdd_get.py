@@ -1,7 +1,3 @@
-from flask import json
-import random
-from src.app.models.inventory import Inventory
-
 mimetype = 'application/json'
 url = "/inventory/"
 
@@ -59,4 +55,31 @@ def test_inventory_get_success(client, logged_in_client):
     id = 1
     response = client.get(f"{url}{id}", headers=headers)
     assert response.status_code == 200
-    assert response.json == "pass"# retornar todos os dados do item 
+    assert "id" in response.json
+    assert "product_category_id" in response.json
+    assert "user_id" in response.json
+    assert "title" in response.json
+    assert "product_code" in response.json
+    assert "value" in response.json
+    assert "brand" in response.json
+    assert "template" in response.json
+    assert "description" in response.json
+    assert "id" in response.json["user_id"]
+    assert "name" in response.json["user_id"]
+    assert "email" in response.json["user_id"]
+    assert "id" in response.json["product_category"]
+    assert "description" in response.json["product_category"]
+
+
+# retorno esperado
+# {
+#     "id": 3,
+#     "product_category": {"id": 3, "description": "alguma coisa"},
+#     "user": {"id": 3, "name": "Ervalino", "email": "erva_lino@email.com"},
+#     "title": "outra coisa",
+#     "product_code": 1234123,
+#     "value": 312,
+#     "brand": "asdasdasdasd",
+#     "template": "sdfsdfsdf",
+#     "description": "qweqweqwe"
+# }
