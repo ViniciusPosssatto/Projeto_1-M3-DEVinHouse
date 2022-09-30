@@ -156,6 +156,7 @@ def test_inventory_patch_field_excedeeded_limit(client, logged_in_client):
     assert response.status_code == 404
     assert response.json["error"] == 'Item não encontrado.'
 
+
 def test_inventory_change_fields_not_null(client, logged_in_client):
     headers = {
         'Content-Type': mimetype,
@@ -176,3 +177,22 @@ def test_inventory_change_fields_not_null(client, logged_in_client):
     response = client.patch(f"{url}{id}", data=json.dumps(data), headers=headers)
     assert response.status_code == 400
     assert response.json[keys_wrong_in_request] == ['Field may not be null.']
+
+
+def test_inventory_patch_success(client, logged_in_client):
+    headers = {
+        'Content-Type': mimetype,
+        'Accept': mimetype,
+        'Authorization': f'Bearer {logged_in_client}'
+    }
+
+    data = {
+        "title" : "Camera HD",
+        "value" : 1350,
+        "brand" : "Tekpix",
+        "template" : "123-tek",
+        "description" : "Camera full hd, grava audio e video" 
+    } 
+    id = 5
+    response = client.patch(f"{url}{id}", data=json.dumps(data), headers=headers)
+    assert response.status_code == 204
