@@ -79,3 +79,9 @@ class UpdateUserBodySchema(Schema):
     def validate_cep(self, cep):
         if not cep.isnumeric() and len(cep) != 8:
             raise ValidationError('O cep não é válido.')
+
+
+class CreateRoleBodySchema(Schema):
+    name = fields.Str(required=True, error_messages=handle_error_messages('name'))
+    description = fields.Str(required=True, error_messages=handle_error_messages('description'))
+    permissions = fields.List(fields.Int)

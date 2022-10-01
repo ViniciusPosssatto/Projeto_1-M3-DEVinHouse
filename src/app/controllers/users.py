@@ -9,7 +9,7 @@ from flask.globals import session
 from google import auth 
 from google.oauth2 import id_token 
 from src.app import db
-from src.app.services.user_services import make_login, create_user, get_user_by_email
+from src.app.services.user_services import make_login, create_user, create_role, get_user_by_email
 from src.app.utils import generate_jwt, gera_password
 from src.app.middlewares.auth import requires_access_level
 from src.app.models.user import User
@@ -27,7 +27,7 @@ user = Blueprint('user', __name__, url_prefix='/user')
 
 
 @user.route("/", methods=['GET'])
-# @requires_access_level(['READ'])
+@requires_access_level(['READ'])
 def list_user_per_page():
 
     name = request.args.get('name')
@@ -179,3 +179,20 @@ def callback():
     token = generate_jwt(user_google_dict)
 
     return redirect(f"{current_app.config['FRONTEND_URL']}?jwt={token}")
+
+
+@user.route("/role", methods=['POST'])
+@requires_access_level(['READ', 'WRITE', 'UPDATE', 'DELETE'])
+@validate_body(user_schemas.CreateRoleBodySchema())
+def post_create_role(body):
+    keys = ["name", "description", "permissions"]
+    for key in keys:
+        if not key in body:
+            return jsonify({key: f"O campo {key} é obrigatório."}), 400
+    
+    response = create_role(**body)
+
+    if "error" in response:
+        return jsonify(response), 400
+
+    return jsonify(response), 201
