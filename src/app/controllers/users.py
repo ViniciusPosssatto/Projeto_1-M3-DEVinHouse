@@ -75,7 +75,10 @@ def update_user(id, body):
 @requires_access_level(['READ', 'WRITE', 'UPDATE', 'DELETE'])
 @validate_body(user_schemas.CreateUserBodySchema())
 def post_create_users(body):
-
+    keys = ["gender_id", "city_id", "role_id"]
+    for key in keys:
+        if key not in body:
+            return jsonify({key: [f"O campo {key} é obrigatório."]}), 400
     models = [
             {'model': Gender, 'id': body['gender_id']}, 
             {'model': City,'id': body['city_id']},
