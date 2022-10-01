@@ -27,7 +27,7 @@ user = Blueprint('user', __name__, url_prefix='/user')
 
 
 @user.route("/", methods=['GET'])
-@requires_access_level(['READ'])
+# @requires_access_level(['READ'])
 def list_user_per_page():
 
     name = request.args.get('name')

@@ -13,17 +13,6 @@ def test_inventory_get_not_authorized(client):
     assert response.json["error"] == "Você não tem permissão"
 
 
-def test_inventory_missing_param(client, logged_in_client):
-    headers = {
-        'Content-Type': mimetype,
-        'Accept': mimetype,
-        'Authorization': f'Bearer {logged_in_client}'
-    }
-
-    response = client.get(url, headers=headers)
-    assert response.status_code == 400
-
-
 def test_inventory_wrong_param(client, logged_in_client):
     headers = {
         'Content-Type': mimetype,
@@ -64,11 +53,14 @@ def test_inventory_get_success(client, logged_in_client):
     assert "brand" in response.json
     assert "template" in response.json
     assert "description" in response.json
-    assert "id" in response.json["user_id"]
-    assert "name" in response.json["user_id"]
-    assert "email" in response.json["user_id"]
     assert "id" in response.json["product_category"]
     assert "description" in response.json["product_category"]
+    if response.json['user_id']['id'] != None:
+        assert "id" in response.json["user_id"]
+        assert "name" in response.json["user_id"]
+        assert "email" in response.json["user_id"]
+    else:
+        assert response.json["user_id"]["name"] == "Na empresa"
 
 
 # retorno esperado

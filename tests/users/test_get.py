@@ -1,5 +1,6 @@
 from flask import json
 import random
+from src.app.models.user import User
 
 
 mimetype = 'application/json'
@@ -44,6 +45,18 @@ def test_get_all_success(client, logged_in_client):
         assert "email" in item
         assert "phone" in item
         assert "role.name" in item
+
+
+def test_get_count_all_success(client, logged_in_client):
+    headers = {
+        'Content-Type': mimetype,
+        'Accept': mimetype,
+        'Authorization': f'Bearer {logged_in_client}'
+    }
+    all_users = User.query.all()
+    response = client.get(f"{url}", headers=headers)
+    assert response.status_code == 200
+    assert len(all_users) == len(response.json)
 
 
 def test_get_success_one_query_param(client, logged_in_client):
@@ -94,7 +107,11 @@ def test_get_failed_page_param(client, logged_in_client):
         'Accept': mimetype,
         'Authorization': f'Bearer {logged_in_client}'
     }
-    query_param = "page=-1"
+    all_users = User.query.all()
+    per_page = 20
+    pages = round(len(all_users) / per_page)
+    page_wrong = pages + 1
+    query_param = f"page={page_wrong}"
    
     response = client.get(f"{url}?{query_param}", headers=headers)
     assert response.status_code == 404
