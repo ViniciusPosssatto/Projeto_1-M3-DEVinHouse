@@ -1,6 +1,6 @@
 from src.app import db, ma
 from src.app.models.product_category import ProductCategory, products_share_schema
-from src.app.models.user import User, user_share_schema
+from src.app.models.user import User, user_role_share_schema, user_share_schema
 
 
 class Inventory(db.Model):
@@ -50,8 +50,17 @@ class InventorySchema(ma.Schema):
     product_category = ma.Nested(products_share_schema)
     user = ma.Nested(user_share_schema)
     class Meta:
-        fields = ('id', 'product_category_id', 'user_id', 'title', 'product_code', 'value', 'brand', 'template', 'description')
+        fields = ("user_id", 'id', 'product_category_id', 'title', 'product_code', 'value', 'brand', 'template', 'description')
 
 
 inventory_share_schema = InventorySchema()
 inventories_share_schema = InventorySchema(many = True)
+
+
+class InventoryUserSchema(ma.Schema):
+    user = ma.Nested(user_role_share_schema)
+    class Meta:
+        fields = ("user", 'id', 'product_category_id', 'title', 'product_code', 'value', 'brand', 'template', 'description', "one_product")
+
+
+inventory_user_share_schema = InventoryUserSchema()
