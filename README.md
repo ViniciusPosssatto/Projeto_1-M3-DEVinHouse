@@ -120,7 +120,7 @@ poetry run flask populate_db
 
 ## Testes
 <p align="justify">
- Os testes criados são executados através do **pytest** através dos comandos a seguir:
+ Os testes criados são executados através do **_pytest_** através dos comandos a seguir:
 </p>
 
 - Para executar todos os testes:
