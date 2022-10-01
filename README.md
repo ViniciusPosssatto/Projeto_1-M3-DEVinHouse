@@ -117,6 +117,41 @@ poetry run flask populate_db
 ```
 `OBS`: Caso precise, pode utilizar o comando **_poetry run flask drop_all_tables_** para retirar todas as tabelas do banco e recomeçar novamente (não sendo necessário o comando 'poetry run flask db init'). 
 
+
+## Testes
+<p align="justify">
+ Os testes criados são executados através do **pytest** através dos comandos a seguir:
+</p>
+
+- Para executar todos os testes:
+
+```
+pytest tests/ -v
+```
+
+- Executar os testes sem mensagens de **warnings**:
+
+```
+pytest tests/ -v -W ignore::DeprecationWarning
+```
+
+- Executa todos os testes e retorna a porcentagem de cobertura dos testes:
+
+```
+pytest tests/ -v --cov -W ignore::DeprecationWarning
+```
+
+- Gerar um relatório com o testes e coberturas:
+```
+coverage html
+```
+
+- Abrir relatório:
+```
+htmlcov/index.html
+```
+
+
 ## Endpoints
 1. `[POST] /user/login (users)` - [Regras endpoint 1](#regras-endpoint-1)
 2. `[POST] /auth/google (users)` - [Regras endpoint 2](#regras-endpoint-2)
@@ -128,6 +163,8 @@ poetry run flask populate_db
 8. `[PATCH] /user/<int:inventory> (inventory)` - [Regras endpoint 8](#regras-endpoint-8)
 9. `[GET] /inventory?<int:id> ou <string:name> (inventories)` - [Regras endpoint 9](#regras-endpoint-9)
 10. `[GET] /inventory/results (inventories)` - [Regras endpoint 10](#regras-endpoint-10)
+11. `[GET] /inventory/<int:id> (inventories)` - [Regras do endpoint 11](#regras-endpoint-11)
+12. `[POST] /user/role (users)` - [Regras do endpoint 12](#regras-endpoint-12)
 
 ### Regras ENDPOINT 1:
 
@@ -275,6 +312,35 @@ name: string (Query param não obrigatório)
 - Retorna o total da soma de todos os valores dos itens.
 - Retorna quantos itens estão emprestados para usuários.
 - Retorna as estatísticas, além do Status 200 (OK).
+
+### Regras ENDPOINT 11
+
+- O usuário deve estar logado e possuir autorização READ para este endpoint de
+inventário. Caso não possua, irá retornar o Status de Erro 403 (Forbidden).
+- Se o id informado não existir, retornará um erro 404 informando que o item não existe.
+- Irá retornar o produto específico com os campos da tabela em si junto com seus
+relacionamentos, juntamente com o status 200.
+
+#### Entrada:
+id: integer (path param obrigatório)
+
+### Regras ENDPOINT 12
+
+- O usuário deve estar logado e possuir autorização (READ, WRITE, UPDATE e DELETE) para este endpoint de usuário. Caso não possua, irá retornar o Status de Erro 403 (Forbidden).
+- Se o cargo que está sendo criado já existe retornará um erro 400, informando que o cargo já existe
+- Validará se as permissões enviadas existam, se não existirem, retornará um erro 400 informando que as
+permissões são inválidas.
+- Se der sucesso na criação irá retornar a mensagem informando que o cargo foi criado utilizando o Status 201 (OK).
+
+#### Body parameter
+
+```js
+{
+    name (obrigatório), 
+    description  (obrigatório), 
+    permissions (obrigatório)
+}
+```
 
 ## Tecnologias utilizadas
 
