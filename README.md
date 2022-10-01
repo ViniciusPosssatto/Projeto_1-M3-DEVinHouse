@@ -135,7 +135,7 @@ pytest tests/ -v
 pytest tests/ -v -W ignore::DeprecationWarning
 ```
 
-- Executa todos os testes e retorna a porcentagem de cobertura dos testes:
+- Executa todos os testes e retorna a porcentagem de cobertura do código:
 
 ```
 pytest tests/ -v --cov -W ignore::DeprecationWarning
