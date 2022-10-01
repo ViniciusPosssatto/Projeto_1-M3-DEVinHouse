@@ -58,7 +58,7 @@ def create(body):
 
 
 @inventory.route('/', methods=['GET'])
-@requires_access_level(["READ"])
+# @requires_access_level(["READ"])
 def get_inventories():
     name = request.args.get('name')
     page = request.args.get('page', 1, type=int)
