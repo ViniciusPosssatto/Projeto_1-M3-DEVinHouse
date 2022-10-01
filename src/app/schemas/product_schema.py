@@ -29,6 +29,9 @@ class ProductBodySchema(Schema):
             raise ValidationError('O valor não pode ser menor ou igual a 0.')
 
 class UpdateProductBodySchema(Schema):
+    id = fields.Integer()
+    product_category_id = fields.Integer()
+    product_code = fields.Integer()
     user_id = fields.Integer()
     title = fields.Str()
     value = fields.Float()
@@ -53,3 +56,18 @@ class UpdateProductBodySchema(Schema):
     def validate_value(self, value):
         if value <= 0:
             raise ValidationError('O valor não pode ser menor ou igual a 0.')
+
+    @validates('id')
+    def id_error(self, value):
+        if value:
+            raise ValidationError('Este campo não pode ser alterado')
+
+    @validates('product_category_id')
+    def product_category_id_error(self, value):
+        if value:
+            raise ValidationError('Este campo não pode ser alterado')
+
+    @validates('product_code')
+    def product_code_error(self, value):
+        if value:
+            raise ValidationError('Este campo não pode ser alterado')

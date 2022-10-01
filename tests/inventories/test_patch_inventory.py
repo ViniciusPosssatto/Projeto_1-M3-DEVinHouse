@@ -68,7 +68,7 @@ def test_inventory_patch_not_update_fields_id(client, logged_in_client):
     id = 5
     response = client.patch(f"{url}{id}", data=json.dumps(data), headers=headers)
     assert response.status_code == 400
-    assert response.json[keys_wrong_in_request] == ['Unknown field.']
+    assert response.json[keys_wrong_in_request] == ['Este campo não pode ser alterado']
 
 
 def test_inventory_patch_not_update_value_to_zero(client, logged_in_client):
