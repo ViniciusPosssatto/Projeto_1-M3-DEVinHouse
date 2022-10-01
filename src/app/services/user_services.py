@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
-from src.app.models.user import User
+from src.app.models.role import Role
+from src.app.models.permission import Permission
 from src.app.models.user import User, user_share_schema, users_roles_share_schema
 from src.app.utils import generate_jwt
 
@@ -31,6 +32,25 @@ def create_user(gender_id, city_id, role_id, name, age, email,\
     except:
         return {"error": "Erro na criação de Usuário. Email já existe."}
 
+
+def create_role(name, description, permissions):
+
+    query_role = Role.query.filter(Role.description.ilike(f"%{description}%")).all()
+    if query_role:
+        return {"error": "Este cargo já existe"}
+    query_permission = Permission.query.filter(Permission.id.in_(permissions)).all()
+    if len(query_permission) < len(permissions):
+        return {"error": "Alguma das permissões enviadas são inválidas"}
+    print(query_permission)
+    try:
+        Role.seed(
+            name=name,
+            description=description,
+            permissions=query_permission
+        )
+        return {"message": "O cargo foi criado com sucesso"}
+    except Exception as exp:
+        return {"error": "Algo inesperado aconteceu"}
 
 def make_login(email, password):
 

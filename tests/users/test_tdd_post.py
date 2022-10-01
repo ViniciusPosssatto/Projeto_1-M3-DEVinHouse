@@ -32,7 +32,10 @@ def test_create_missing_fields(client, logged_in_client):
     del data[keys_not_have_in_request]
     response = client.post(url, data=json.dumps(data), headers=headers)
     assert response.status_code == 400
-    assert response.json[keys_not_have_in_request] == [f"O campo {keys_not_have_in_request} é obrigatório."]
+    if keys_not_have_in_request == "permissions":
+        assert response.json[keys_not_have_in_request] == f"O campo {keys_not_have_in_request} é obrigatório."
+    else:
+        assert response.json[keys_not_have_in_request] == [f"O campo {keys_not_have_in_request} é obrigatório."]
 
 
 def test_create_wrong_id_permissions(client, logged_in_client):
@@ -48,7 +51,7 @@ def test_create_wrong_id_permissions(client, logged_in_client):
     }
     response = client.post(url, data=json.dumps(data), headers=headers)
     assert response.status_code == 400
-    assert response.json["error"] == "As permissões enviadas são inválidas"
+    assert response.json["error"] == "Alguma das permissões enviadas são inválidas"
 
 
 def test_create_role_success(client, logged_in_client):
@@ -74,7 +77,7 @@ def test_create_role_exists(client, logged_in_client):
         "Authorization": f"Bearer {logged_in_client}"
     }
     data = {
-        "description": "Alguma coisa ai",
+        "description": "Desenvolvedor Frontend",
         "name": "Admin",
         "permissions": [1, 2, 3, 4]
     }
