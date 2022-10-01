@@ -58,7 +58,7 @@ def create(body):
 
 
 @inventory.route('/', methods=['GET'])
-# @requires_access_level(["READ"])
+@requires_access_level(["READ"])
 def get_inventories():
     name = request.args.get('name')
     page = request.args.get('page', 1, type=int)
@@ -92,3 +92,19 @@ def update_item(id, body):
         return jsonify({"Message": "Item atualizado com sucesso."}), 204
     except:
         return jsonify({"error": 'Item não encontrado.'}), 404
+
+
+@inventory.route('/<int:id>', methods=['GET'])
+@requires_access_level(["READ"])
+def get_inventory_by_id(id):
+
+    if id:
+        inventory_by_id = queries(model="inventory", type_request="filter_by", schema="inventory_user", filter_param=id)
+        
+        if not inventory_by_id:
+            return jsonify(), 204
+
+        if inventory_by_id["user"] == None:
+            inventory_by_id["user"] = "Na empresa"
+
+        return jsonify(inventory_by_id), 200

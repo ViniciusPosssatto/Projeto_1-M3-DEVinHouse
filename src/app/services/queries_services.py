@@ -1,7 +1,7 @@
 from src.app import db
 from src.app.models.city import City, cities_share_schema, city_share_schema
 from src.app.models.gender import Gender, gender_share_schema, genders_share_schema
-from src.app.models.inventory import Inventory, inventories_share_schema, inventory_share_schema
+from src.app.models.inventory import Inventory, inventories_share_schema, inventory_share_schema, inventory_user_share_schema
 from src.app.models.user import User, users_share_schema, user_share_schema
 from src.app.models.role import Role, role_share_schema, roles_share_schema
 
@@ -11,7 +11,8 @@ options_schema = {
     'user': user_share_schema, 'user': users_share_schema,
     'city': city_share_schema, 'cities': cities_share_schema,
     'role': role_share_schema, 'roles': roles_share_schema,
-    'gender': gender_share_schema, 'genders': genders_share_schema
+    'gender': gender_share_schema, 'genders': genders_share_schema,
+    'inventory_user': inventory_user_share_schema
     }
 
 options_models = {
